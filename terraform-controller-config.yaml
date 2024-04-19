@@ -7,8 +7,5 @@ metadata:
   annotations:
     eks.amazonaws.com/role-arn: arn:aws:iam::336151728602:role/poc-demo-1
 spec:
-  image: crossplane/provider-terraform-controller:v0.15.0
-  args:
-    - "--debug"
   podSecurityContext:
     fsGroup: 2000
