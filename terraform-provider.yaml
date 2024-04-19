@@ -1,8 +1,8 @@
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-terraform
+  name: terraform-provider-controller-config
 spec:
   package: xpkg.upbound.io/upbound/provider-terraform:v0.15.0
   controllerConfigRef:
-    name: aws-irsa
+    name: controller
