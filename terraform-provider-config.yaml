@@ -1,0 +1,19 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  annotations: {}
+  name: aws-irsa
+spec:
+  configuration: |
+    terraform {
+      backend "kubernetes" {
+        secret_suffix     = "providerconfig-tf-aws"
+        namespace         = "crossplane-system"
+        in_cluster_config = true
+      }
+    }
+    provider "aws" {}
+  credentials:
+    # Terraform natively supports IRSA auth so we can use None here
+    - filename: aws.json
+      source: None
