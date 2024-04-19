@@ -2,7 +2,6 @@ apiVersion: pkg.crossplane.io/v1alpha1
 kind: ControllerConfig
 metadata:
   name: terraform-provider-controller-config
-  namespace: crossplane-system
   labels:
     app: crossplane-provider-terraform
   annotations:
