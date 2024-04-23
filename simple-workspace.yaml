@@ -18,6 +18,7 @@ spec:
       resource "aws_subnet" "main1" {
         vpc_id     = aws_vpc.main.id
         cidr_block = "10.1.0.0/20"
+        availability_zone = "us-east-1d"
 
         tags = {
           Name = "${var.eks_cluster_name}"
@@ -27,6 +28,7 @@ spec:
       resource "aws_subnet" "main2" {
         vpc_id     = aws_vpc.main.id
         cidr_block = "10.1.16.0/20"
+        availability_zone = "us-east-1f"
 
         tags = {
           Name = "${var.eks_cluster_name}"
