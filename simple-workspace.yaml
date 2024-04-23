@@ -69,7 +69,7 @@ spec:
 
         vpc_config {
           endpoint_public_access  = true
-          subnet_ids = subnet_ids = [aws_subnet.main1.id, aws_subnet.main2.id]
+          subnet_ids = [aws_subnet.main1.id, aws_subnet.main2.id]
         }
 
         access_config {
