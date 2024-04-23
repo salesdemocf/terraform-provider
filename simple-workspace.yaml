@@ -68,6 +68,7 @@ spec:
       resource "aws_eks_cluster" "main" {
         name    = "${var.eks_cluster_name}"
         role_arn = aws_iam_role.main.arn
+        subnet_ids      = [aws_subnet.main1.id, aws_subnet.main2.id]
 
         vpc_config {
           endpoint_public_access  = true
