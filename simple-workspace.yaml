@@ -114,6 +114,7 @@ spec:
       variable "eks_cluster_name" {
         description = "EKS Cluster Name"
         type        = string
+      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment"
