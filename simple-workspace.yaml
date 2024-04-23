@@ -8,60 +8,60 @@ spec:
   forProvider:
     source: Inline
     module: |
-    resource aws_vpc "main" {
-      name = "${var.eks_cluster_name}"
-      cidr = "10.1.0.0/16"
+      resource aws_vpc "main" {
+        name = "${var.eks_cluster_name}"
+        cidr = "10.1.0.0/16"
 
-      public_subnets  = ["10.1.0.0/20","10.1.16.0/20"]
+        public_subnets  = ["10.1.0.0/20","10.1.16.0/20"]
 
-      map_public_ip_on_launch = "true"
-    }
-
-    # Create EKS Cluster
-
-    resource aws_eks_cluster "eks" {
-      version = "~> 20.0"
-
-      enable_cluster_creator_admin_permissions = true
-
-      cluster_name    = "${var.eks_cluster_name}"
-      cluster_version = "${var.eks_cluster_version}"
-      cluster_encryption_config = {}
-
-      cluster_endpoint_public_access  = true
-      cluster_endpoint_public_access_cidrs = [
-        "0.0.0.0/0"
-      ]
-      cluster_addons = {
-        coredns = {
-          most_recent = true
-        }
-        kube-proxy = {
-          most_recent = true
-        }
-        vpc-cni = {
-          most_recent = true
-        }
-        aws-ebs-csi-driver = {
-          most_recent = true
-        }
+        map_public_ip_on_launch = "true"
       }
 
-      vpc_id                   = aws_vpc.main.vpc_id
-      subnet_ids               = aws_vpc.main.public_subnets
-      control_plane_subnet_ids = aws_vpc.main.public_subnets
+      # Create EKS Cluster
 
-      # EKS Managed Node Group(s)
-      eks_managed_node_groups = {
-        node_group = {
-          min_size     = 1
-          max_size     = 1
-          desired_size = 1
+      resource aws_eks_cluster "eks" {
+        version = "~> 20.0"
 
-          instance_types = ["t3.large"]
-          capacity_type  = "ON_DEMAND"
+        enable_cluster_creator_admin_permissions = true
+
+        cluster_name    = "${var.eks_cluster_name}"
+        cluster_version = "${var.eks_cluster_version}"
+        cluster_encryption_config = {}
+
+        cluster_endpoint_public_access  = true
+        cluster_endpoint_public_access_cidrs = [
+          "0.0.0.0/0"
+        ]
+        cluster_addons = {
+          coredns = {
+            most_recent = true
+          }
+          kube-proxy = {
+            most_recent = true
+          }
+          vpc-cni = {
+            most_recent = true
+          }
+          aws-ebs-csi-driver = {
+            most_recent = true
+          }
         }
-      }
+
+        vpc_id                   = aws_vpc.main.vpc_id
+        subnet_ids               = aws_vpc.main.public_subnets
+        control_plane_subnet_ids = aws_vpc.main.public_subnets
+
+        # EKS Managed Node Group(s)
+        eks_managed_node_groups = {
+          node_group = {
+            min_size     = 1
+            max_size     = 1
+            desired_size = 1
+
+            instance_types = ["t3.large"]
+            capacity_type  = "ON_DEMAND"
+          }
+        }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment"
