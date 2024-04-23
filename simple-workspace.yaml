@@ -100,7 +100,7 @@ spec:
         cluster_name    = aws_eks_cluster.main.name
         node_group_name = aws_eks_cluster.main.name
         node_role_arn   = aws_iam_role.main.arn
-        subnet_ids      = aws_subnet.main[*].id
+        subnet_ids      = [aws_subnet.main1.id, aws_subnet.main2.id]
         instance_types = ["t3.large"]
 
         scaling_config {
