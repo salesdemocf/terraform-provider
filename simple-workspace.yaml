@@ -9,7 +9,7 @@ spec:
     source: Inline
     module: |
       resource "aws_vpc" "main" {
-        cidr_block = "10.20.30.0/24"
+        cidr_block = "10.20.0.0/16"
 
         tags = {
           Name = "${var.eks_cluster_name}"
@@ -17,7 +17,7 @@ spec:
       }
       resource "aws_subnet" "main" {
         vpc_id     = aws_vpc.main.id
-        cidr_block = "10.20.30.1/32"
+        cidr_block = "10.20.10.0/24"
 
         tags = {
           Name = "${var.eks_cluster_name}"
