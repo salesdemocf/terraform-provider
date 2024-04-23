@@ -62,6 +62,7 @@ spec:
             capacity_type  = "ON_DEMAND"
           }
         }
+      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment"
