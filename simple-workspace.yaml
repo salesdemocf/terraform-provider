@@ -108,7 +108,7 @@ spec:
         depends_on = [
           aws_iam_role_policy_attachment.main-AmazonEKSWorkerNodePolicy,
           aws_iam_role_policy_attachment.main-AmazonEKS_CNI_Policy,
-          aws_iam_role_policy_attachment.main-AmazonEC2ContainerRegistryReadOnly,
+          aws_iam_role_policy_attachment.main-AmazonEC2ContainerRegistryReadOnly
         ]
       }
     vars:
