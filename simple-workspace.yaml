@@ -111,6 +111,9 @@ spec:
           aws_iam_role_policy_attachment.main-AmazonEC2ContainerRegistryReadOnly
         ]
       }
+      variable "eks_cluster_name" {
+        description = "EKS Cluster Name"
+        type        = string
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment"
