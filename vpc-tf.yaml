@@ -15,6 +15,7 @@ spec:
           Name = "${var.tag}"
         }
       }
+
       resource "aws_subnet" "main1" {
         vpc_id     = aws_vpc.main.id
         cidr_block = "10.1.0.0/20"
@@ -34,18 +35,22 @@ spec:
           Name = "${var.tag}"
         }
       }
+
       variable "tag" {
         description = "Amazon Tag"
         type        = string
       }
+
       output "aws_vpc_id" {
         value = aws_vpc.main.id
         sensitive = false
       }
+
       output "aws_subnet_main_1_id" {
         value = aws_subnet.main1.id
         sensitive = false
       }
+
       output "aws_subnet_main_2_id" {
         value = aws_subnet.main2.id
         sensitive = false

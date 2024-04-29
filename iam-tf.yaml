@@ -44,10 +44,12 @@ spec:
         policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
         role       = aws_iam_role.main.name
       }
+
       variable "iam_role_name" {
         description = "IAM role name"
         type        = string
       }
+
       output "aws_iam_role_id" {
         value = aws_iam_role.main.arn
         sensitive = false
