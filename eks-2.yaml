@@ -44,7 +44,7 @@ spec:
       resource "aws_eks_node_group" "main" {
         cluster_name    = aws_eks_cluster.main.name
         node_group_name = aws_eks_cluster.main.name
-        node_role_arn   = aws_iam_role.main.arn
+        node_role_arn   = var.aws_iam_role_main_arn
         subnet_ids      = [var.aws_subnet_main_1_id, var.aws_subnet_main_2_id]
         instance_types = ["t3.large"]
 
