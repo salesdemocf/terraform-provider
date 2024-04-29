@@ -1,0 +1,55 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: codefresh-demo-network
+spec:
+  providerConfigRef:
+    name: aws-irsa
+  forProvider:
+    source: Inline
+    module: |
+      resource "aws_vpc" "main" {
+        cidr_block = "10.1.0.0/16"
+
+        tags = {
+          Name = "${var.tag}"
+        }
+      }
+      resource "aws_subnet" "main1" {
+        vpc_id     = aws_vpc.main.id
+        cidr_block = "10.1.0.0/20"
+        availability_zone = "us-east-1d"
+
+        tags = {
+          Name = "${var.tag}"
+        }
+      }
+
+      resource "aws_subnet" "main2" {
+        vpc_id     = aws_vpc.main.id
+        cidr_block = "10.1.16.0/20"
+        availability_zone = "us-east-1f"
+
+        tags = {
+          Name = "${var.tag}"
+        }
+      }
+      variable "tag" {
+        description = "Amazon Tag"
+        type        = string
+      }
+      output "aws_vpc_id" {
+        value = aws_vpc.main.id
+        sensitive = false
+      }
+      output "aws_subnet_main_1_id" {
+        value = aws_subnet.main1.id
+        sensitive = false
+      }
+      output "aws_subnet_main_2_id" {
+        value = aws_subnet.main2.id
+        sensitive = false
+      }
+    vars:
+      - key: tag
+        value: "codefresh-demo-environment"
