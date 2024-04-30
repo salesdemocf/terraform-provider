@@ -9,4 +9,4 @@ metadata:
 spec:
   podSecurityContext:
     fsGroup: 2000
-  args: ["-d","--poll=15m","--max-reconcile-rate=5"]
+  args: ["-d"]
