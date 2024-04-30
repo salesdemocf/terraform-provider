@@ -17,6 +17,14 @@ spec:
         }
       }
 
+      resource "aws_internet_gateway" "main" {
+        vpc_id = aws_vpc.main.id
+
+        tags = {
+          Name = "${var.tag}"
+        }
+      }
+
       resource "aws_subnet" "main1" {
         vpc_id     = aws_vpc.main.id
         cidr_block = "10.1.0.0/20"
