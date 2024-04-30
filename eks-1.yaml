@@ -54,13 +54,13 @@ spec:
 
       resource "aws_eks_access_entry" "main" {
         cluster_name      = aws_eks_cluster.main.name
-        principal_arn     = var.aws_iam_role_main_arn
+        principal_arn     = var.aws_iam_role_main_cluster_arn
       }
 
       resource "aws_eks_access_policy_association" "main" {
         cluster_name  = aws_eks_cluster.main.name
         policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-        principal_arn = var.aws_iam_role_main_arn
+        principal_arn = var.aws_iam_role_main_cluster_arn
 
         access_scope {
           type       = "cluster"
