@@ -82,12 +82,12 @@ spec:
         type        = string
       }
 
-      output "aws_iam_role_id" {
+      output "aws_iam_role_cluster_id" {
         value = aws_iam_role.main-cluster.arn
         sensitive = false
       }
 
-      output "aws_iam_role_id" {
+      output "aws_iam_role_worker_id" {
         value = aws_iam_role.main-worker.arn
         sensitive = false
       }
