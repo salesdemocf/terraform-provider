@@ -113,9 +113,9 @@ spec:
       - key: eks_cluster_name
         value: "codefresh-demo-environment-eks-1"
       - key: aws_iam_role_main_cluster_arn
-        value: "arn:aws:iam::336151728602:role/codefresh-demo-cluster"
+        value: "arn:aws:iam::336151728602:role/codefresh-demo-environment-cluster"
       - key: aws_iam_role_main_worker_arn
-        value: "arn:aws:iam::336151728602:role/codefresh-demo-worker"
+        value: "arn:aws:iam::336151728602:role/codefresh-demo-environment-worker"
       - key: aws_subnet_main_1_id
         value: "subnet-024f5da41416f15d7"
       - key: aws_subnet_main_2_id
