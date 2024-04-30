@@ -9,7 +9,7 @@ spec:
     source: Inline
     module: |
       resource "aws_iam_role" "main-cluster" {
-        name = "${var.iam_role_name}-worker"
+        name = "${var.iam_role_name}-cluster"
 
         assume_role_policy = jsonencode({
           Statement = [{
