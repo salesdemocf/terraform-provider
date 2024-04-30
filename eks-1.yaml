@@ -34,24 +34,6 @@ spec:
         ]
       }
 
-      resource "aws_eks_addon" "coredns" {
-        cluster_name                = aws_eks_cluster.main.name
-        addon_name                  = "coredns"
-        resolve_conflicts_on_create = "OVERWRITE"
-      }
-
-      resource "aws_eks_addon" "kube-proxy" {
-        cluster_name                = aws_eks_cluster.main.name
-        addon_name                  = "kube-proxy"
-        resolve_conflicts_on_create = "OVERWRITE"
-      }
-
-      resource "aws_eks_addon" "vpc-cni" {
-        cluster_name                = aws_eks_cluster.main.name
-        addon_name                  = "vpc-cni"
-        resolve_conflicts_on_create = "OVERWRITE"
-      }
-
       resource "aws_eks_access_entry" "main" {
         cluster_name      = aws_eks_cluster.main.name
         principal_arn     = var.aws_iam_role_main_cluster_arn
