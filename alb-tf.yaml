@@ -14,7 +14,7 @@ spec:
         vpc_id      = var.aws_vpc_main_id
 
         tags = {
-          Name = "allow_tls"
+          Name = var.tag
         }
       }
 
