@@ -67,6 +67,15 @@ spec:
         }
       }
 
+      resource "aws_lb_target_group" "main" {
+        name     = var.eks_cluster_name
+        port     = 80
+        protocol = "HTTP"
+        vpc_id   = var.aws_vpc_id
+
+        tags = var.aws_tg_tags
+      }
+
       variable "eks_cluster_name" {
         description = "EKS Cluster Name"
         type        = string
@@ -91,6 +100,16 @@ spec:
         description = "AWS Subnet 2 ID"
         type        = string
       }
+
+      variable "aws_vpc_id" {
+        description = "AWS VPC ID"
+        type        = string
+      }
+
+      variable "aws_tg_tags" {
+        description = "EKS Managed Node Group CapacityType"
+        type        = map
+      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment-eks-2"
@@ -102,3 +121,7 @@ spec:
         value: "subnet-024f5da41416f15d7"
       - key: aws_subnet_main_2_id
         value: "subnet-01a1ec73642b8f057"
+      - key: aws_vpc_id
+        value: "vpc-0aeaf09a787b64582"
+      - key: aws_tg_tags
+        value: {state = "blue"}
