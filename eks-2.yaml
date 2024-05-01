@@ -168,6 +168,10 @@ spec:
         description = "EKS Managed Node Group CapacityType"
         type        = map
       }
+      variable "aws_iam_role_main_user_arn" {
+        description = "AWS User ARN"
+        type        = string
+      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment-eks-2"
