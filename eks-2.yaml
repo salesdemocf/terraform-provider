@@ -167,6 +167,11 @@ spec:
         description = "EKS Managed Node Group CapacityType"
         type        = map
       }
+
+      output "target_group_arn" {
+        value = aws_lb_target_group.main.arn
+        sensitive = false
+      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment-eks-2"
