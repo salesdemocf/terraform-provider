@@ -68,6 +68,16 @@ spec:
         }
       }
 
+      resource "aws_eks_access_policy_association" "user" {
+        cluster_name  = aws_eks_cluster.main.name
+        policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+        principal_arn = var.aws_iam_role_main_user_arn
+
+        access_scope {
+          type       = "cluster"
+        }
+      }
+
       resource "aws_eks_node_group" "main" {
         cluster_name    = aws_eks_cluster.main.name
         node_group_name = "${aws_eks_cluster.main.name}-ng"
@@ -171,6 +181,8 @@ spec:
         value: "subnet-01a1ec73642b8f057"
       - key: aws_vpc_id
         value: "vpc-0aeaf09a787b64582"
+      - key: aws_iam_role_main_user_arn
+        value: "arn:aws:sts::336151728602:assumed-role/AWSReservedSSO_AdministratorAccess_73a1de40e5c65af0/dustin@codefresh.io"
     varmap:
       aws_tg_tags:
         state: blue
