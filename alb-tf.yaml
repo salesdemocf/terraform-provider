@@ -104,4 +104,4 @@ spec:
       - key: aws_vpc_id
         value: "vpc-0aeaf09a787b64582"
       - key: target_group_arn
-        value: "arn:aws:elasticloadbalancing:us-east-1:336151728602:targetgroup/codefresh-demo-environment-eks-2/0ae5a5f154e44c10"
+        value: "arn:aws:elasticloadbalancing:us-east-1:336151728602:targetgroup/codefresh-demo-environment-eks-1/453b2044c2251532"
