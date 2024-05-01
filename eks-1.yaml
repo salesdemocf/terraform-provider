@@ -114,6 +114,11 @@ spec:
         force_update = true
 
         set {
+          name  = "service.type"
+          value = "NodePort"
+        }
+
+        set {
           name  = "service.nodePorts.http"
           value = "30080"
         }
