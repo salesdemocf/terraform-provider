@@ -8,6 +8,25 @@ spec:
   forProvider:
     source: Inline
     module: |
+      terraform {
+        required_providers {
+          helm = {
+            source = "hashicorp/helm"
+            version = "2.12.1"
+          }
+        }
+      }
+      
+      provider "helm" {
+        kubernetes {
+          host                   = data.aws_eks_cluster.main.endpoint
+          cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+          token                  = data.aws_eks_cluster_auth.main.token
+        }  
+        repository_config_path = "${path.module}/.helm/repositories.yaml" 
+        repository_cache       = "${path.module}/.helm"
+      }
+
       resource "aws_eks_cluster" "main" {
         name    = "${var.eks_cluster_name}"
         role_arn = var.aws_iam_role_main_cluster_arn
@@ -67,6 +86,44 @@ spec:
         }
       }
 
+      data "aws_eks_cluster" "main" {
+        name = var.eks_cluster_name
+
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      data "aws_eks_cluster_auth" "main" {
+        name =  var.eks_cluster_name
+        
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      resource "helm_release" "nginx" {
+        name       = "nginx"
+        repository = "oci://registry-1.docker.io/bitnamicharts"
+        chart      = "nginx"
+        version    = "16.0.6"
+        namespace  = "nginx"
+        create_namespace = "true"
+
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      resource "aws_lb_target_group" "main" {
+        name     = var.eks_cluster_name
+        port     = 31097
+        protocol = "HTTP"
+        vpc_id   = var.aws_vpc_id
+
+        tags = var.aws_tg_tags
+      }
+
       variable "eks_cluster_name" {
         description = "EKS Cluster Name"
         type        = string
@@ -91,6 +148,16 @@ spec:
         description = "AWS Subnet 2 ID"
         type        = string
       }
+
+      variable "aws_vpc_id" {
+        description = "AWS VPC ID"
+        type        = string
+      }
+
+      variable "aws_tg_tags" {
+        description = "EKS Managed Node Group CapacityType"
+        type        = map
+      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment-eks-1"
@@ -102,3 +169,8 @@ spec:
         value: "subnet-024f5da41416f15d7"
       - key: aws_subnet_main_2_id
         value: "subnet-01a1ec73642b8f057"
+      - key: aws_vpc_id
+        value: "vpc-0aeaf09a787b64582"
+    varmap:
+      aws_tg_tags:
+        state: idle
