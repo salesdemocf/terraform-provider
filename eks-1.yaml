@@ -115,6 +115,11 @@ spec:
           install = true
         }
 
+        set {
+          name  = "service.nodePorts.http"
+          value = "30080"
+        }
+
         depends_on = [
           aws_eks_node_group.main
         ]
@@ -122,9 +127,12 @@ spec:
 
       resource "aws_lb_target_group" "main" {
         name     = var.eks_cluster_name
-        port     = 31097
+        port     = 30080
         protocol = "HTTP"
         vpc_id   = var.aws_vpc_id
+        healthcheck {
+          path = "healthz"
+        }
 
         tags = var.aws_tg_tags
       }
