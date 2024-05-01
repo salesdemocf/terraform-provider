@@ -18,12 +18,11 @@ spec:
       }
       
       provider "helm" {
-      kubernetes {
-        host                   = data.aws_eks_cluster.demo.endpoint
-        cluster_ca_certificate = base64decode(data.aws_eks_cluster.demo.certificate_authority[0].data)
-        token                  = data.aws_eks_cluster_auth.cluster.token
+        kubernetes {
+          host                   = data.aws_eks_cluster.demo.endpoint
+          cluster_ca_certificate = base64decode(data.aws_eks_cluster.demo.certificate_authority[0].data)
+          token                  = data.aws_eks_cluster_auth.cluster.token
         }  
-      }
         repository_config_path = "${path.module}/.helm/repositories.yaml" 
         repository_cache       = "${path.module}/.helm"
       }
