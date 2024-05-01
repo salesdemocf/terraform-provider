@@ -16,7 +16,14 @@ spec:
           }
         }
       }
+      
       provider "helm" {
+      kubernetes {
+        host                   = data.aws_eks_cluster.demo.endpoint
+        cluster_ca_certificate = base64decode(data.aws_eks_cluster.demo.certificate_authority[0].data)
+        token                  = data.aws_eks_cluster_auth.cluster.token
+        }  
+      }
         repository_config_path = "${path.module}/.helm/repositories.yaml" 
         repository_cache       = "${path.module}/.helm"
       }
@@ -62,16 +69,6 @@ spec:
         }
       }
 
-      resource "aws_eks_access_policy_association" "tf" {
-        cluster_name  = aws_eks_cluster.main.name
-        policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
-        principal_arn = var.tf_provider_arn
-
-        access_scope {
-          type       = "cluster"
-        }
-      }
-
       resource "aws_eks_node_group" "main" {
         cluster_name    = aws_eks_cluster.main.name
         node_group_name = "${aws_eks_cluster.main.name}-ng"
@@ -96,6 +93,10 @@ spec:
         depends_on = [
           aws_eks_node_group.main
         ]
+      }
+
+      data "aws_eks_cluster_auth" "main" {
+        name = aws_eks_cluster.cluster_id
       }
 
       resource "helm_release" "nginx" {
@@ -154,11 +155,6 @@ spec:
         description = "EKS Managed Node Group CapacityType"
         type        = map
       }
-
-      variable "tf_provider_arn" {
-        description = "TF Provider ARN Role"
-        type        = string
-      }
     vars:
       - key: eks_cluster_name
         value: "codefresh-demo-environment-eks-2"
@@ -172,8 +168,6 @@ spec:
         value: "subnet-01a1ec73642b8f057"
       - key: aws_vpc_id
         value: "vpc-0aeaf09a787b64582"
-      - key: tf_provider_arn
-        value: "arn:aws:iam::336151728602:role/poc-demo-1"
     varmap:
       aws_tg_tags:
         state: blue
