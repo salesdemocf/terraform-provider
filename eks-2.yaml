@@ -126,7 +126,7 @@ spec:
         port     = 30080
         protocol = "HTTP"
         vpc_id   = var.aws_vpc_id
-        healthcheck {
+        health_check {
           path = "healthz"
         }
 
