@@ -54,6 +54,17 @@ spec:
         }
       }
 
+      resource "aws_lb_listener" "main_http" {
+        load_balancer_arn = aws_lb.main.arn
+        port              = "80"
+        protocol          = "HTTP"
+
+        default_action {
+          type             = "forward"
+          target_group_arn = var.target_group_arn
+        }
+      }
+
       variable "tag" {
         description = "Amazon Tag"
         type        = string
@@ -74,6 +85,11 @@ spec:
         type        = string
       }
 
+      variable "target_group_arn" {
+        description = "Target Group ARN"
+        type        = string
+      }    
+
       output "aws_alb_id" {
         value = aws_lb.main.arn
         sensitive = false
@@ -87,3 +103,5 @@ spec:
         value: "subnet-01a1ec73642b8f057"
       - key: aws_vpc_id
         value: "vpc-0aeaf09a787b64582"
+      - key: target_group_arn
+        value: "arn:aws:elasticloadbalancing:us-east-1:336151728602:targetgroup/codefresh-demo-environment-eks-2/0ae5a5f154e44c10"
