@@ -123,6 +123,11 @@ spec:
           value = "30080"
         }
 
+        set {
+          name  = "service.nodePorts.https"
+          value = "30443"
+        }
+
         depends_on = [
           aws_eks_node_group.main
         ]
