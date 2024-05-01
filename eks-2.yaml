@@ -125,7 +125,7 @@ spec:
       }
 
       resource "aws_autoscaling_traffic_source_attachment" "main" {
-        autoscaling_group_name = aws_eks_node_group.main.resources.autoscaling_groups.0.name
+        autoscaling_group_name = aws_eks_node_group.main.resources.0.autoscaling_groups.0.name
 
         traffic_source {
           identifier = aws_lb_target_group.main.arn
