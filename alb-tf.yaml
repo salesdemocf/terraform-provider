@@ -1,7 +1,7 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: codefresh-demo-network
+  name: codefresh-demo-alb
 spec:
   providerConfigRef:
     name: aws-irsa
