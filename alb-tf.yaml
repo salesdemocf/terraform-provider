@@ -11,7 +11,7 @@ spec:
       resource "aws_security_group" "main" {
         name        = var.tag
         description = "Allow inbound web traffic and all outbound traffic"
-        vpc_id      = var.aws_vpc_main_id
+        vpc_id      = var.aws_vpc_id
 
         tags = {
           Name = var.tag
