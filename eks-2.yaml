@@ -8,6 +8,18 @@ spec:
   forProvider:
     source: Inline
     module: |
+      provider "helm" {
+        kubernetes {
+          host                   = data.aws_eks_cluster.main.endpoint
+          cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+          exec {
+            api_version = "client.authentication.k8s.io/v1beta1"
+            args        = ["eks", "get-token", "--cluster-name", var.eks_cluster_name]
+            command     = "aws"
+          }  
+        }
+      }
+
       resource "aws_eks_cluster" "main" {
         name    = "${var.eks_cluster_name}"
         role_arn = var.aws_iam_role_main_cluster_arn
@@ -65,6 +77,19 @@ spec:
         update_config {
           max_unavailable = 1
         }
+      }
+
+      resource "helm_release" "nginx" {
+        name       = "nginx"
+        repository = "oci://registry-1.docker.io/bitnamicharts"
+        chart      = "nginx"
+        version    = "16.0.6"
+        namespace  = "nginx"
+        create_namespace = "true"
+
+        depends_on = [
+          aws_eks_node_group.main
+        ]
       }
 
       resource "aws_lb_target_group" "main" {
