@@ -110,7 +110,7 @@ spec:
         namespace  = "nginx"
         create_namespace = "true"
 
-        upgrade = {
+        upgrade {
           enable  = true
           install = true
         }
