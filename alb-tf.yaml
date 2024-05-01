@@ -44,7 +44,7 @@ spec:
         name               = var.tag
         internal           = false
         load_balancer_type = "application"
-        security_groups    = [aws_security_group.lb.sg.id]
+        security_groups    = [aws_security_group.main.id]
         subnets            = [var.aws_subnet_main_1_id, var.aws_subnet_main_2_id]
 
         enable_deletion_protection = true
