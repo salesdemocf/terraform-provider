@@ -30,7 +30,7 @@ spec:
             }
             Condition = {
               ArnLike = {
-                aws:PrincipalArn = [
+                "aws:PrincipalArn" = [
                   "arn:aws:sts::336151728602:assumed-role/AWSReservedSSO_AdministratorAccess_"
                 ]              
               }
