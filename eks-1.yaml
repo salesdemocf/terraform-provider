@@ -11,8 +11,8 @@ spec:
       terraform {
         required_providers {
           helm = {
-            source = "n-oden/helm"
-            version = "0.0.2"
+            source = "hashicorp/helm"
+            version = "2.13.1"
           }
         }
       }
@@ -109,11 +109,7 @@ spec:
         version    = "16.0.6"
         namespace  = "nginx"
         create_namespace = "true"
-
-        upgrade {
-          enable  = true
-          install = true
-        }
+        force_update = true
 
         set {
           name  = "service.nodePorts.http"
