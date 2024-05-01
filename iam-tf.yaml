@@ -13,12 +13,27 @@ spec:
 
         assume_role_policy = jsonencode({
           Statement = [{
+            Sid = "Statement1"
             Action = "sts:AssumeRole"
             Effect = "Allow"
             Principal = {
               Service = [
                 "eks.amazonaws.com"
               ]
+            }
+          },{
+            Sid = "Statement2"
+            Action = "sts:AssumeRole"
+            Effect = "Allow"
+            Principal = {
+              AWS ="arn:aws:iam::336151728602:root"
+            }
+            Condition = {
+              ArnLike = {
+                aws:PrincipalArn = [
+                  "arn:aws:sts::336151728602:assumed-role/AWSReservedSSO_AdministratorAccess_"
+                ]              
+              }
             }
           }]
           Version = "2012-10-17"
