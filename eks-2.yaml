@@ -117,7 +117,7 @@ spec:
 
       resource "aws_lb_target_group" "main" {
         name     = var.eks_cluster_name
-        port     = 80
+        port     = 31097
         protocol = "HTTP"
         vpc_id   = var.aws_vpc_id
 
