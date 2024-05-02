@@ -65,6 +65,14 @@ spec:
         }
       }
 
+      resource "aws_route53_record" "main" {
+        zone_id = aws_lb.main.zone_id
+        name    = "eksbg.sales-dev.codefresh.io"
+        type    = "CNAME"
+        ttl     = 300
+        records = [aws_lb.main.dns_name]
+      }
+
       variable "tag" {
         description = "Amazon Tag"
         type        = string
@@ -88,7 +96,7 @@ spec:
       variable "target_group_arn" {
         description = "Target Group ARN"
         type        = string
-      }    
+      }
 
       output "aws_alb_id" {
         value = aws_lb.main.arn
