@@ -114,16 +114,6 @@ spec:
         force_update = true
 
         set {
-          name  = "healthIngress.enabled"
-          value = "true"
-        }
-
-        set {
-          name  = "healthIngress.path"
-          value = "/healthz"
-        }
-
-        set {
           name  = "service.type"
           value = "NodePort"
         }
