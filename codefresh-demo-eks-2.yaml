@@ -1,0 +1,208 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: codefresh-demo-eks-2
+spec:
+  providerConfigRef:
+    name: aws-irsa
+  forProvider:
+    initArgs:
+      - -upgrade=true
+    source: Inline
+    module: |
+      terraform {
+        required_providers {
+          helm = {
+            source = "hashicorp/helm"
+            version = "2.13.1"
+          }
+        }
+      }
+      
+      provider "helm" {
+        kubernetes {
+          host                   = data.aws_eks_cluster.main.endpoint
+          cluster_ca_certificate = base64decode(data.aws_eks_cluster.main.certificate_authority[0].data)
+          token                  = data.aws_eks_cluster_auth.main.token
+        }  
+        repository_config_path = "${path.module}/.helm/repositories.yaml" 
+        repository_cache       = "${path.module}/.helm"
+      }
+
+      resource "aws_eks_cluster" "main" {
+        name    = "${var.eks_cluster_name}"
+        role_arn = var.aws_iam_role_main_cluster_arn
+
+        vpc_config {
+          endpoint_public_access  = true
+          endpoint_private_access  = true
+          public_access_cidrs = [ 
+            "0.0.0.0/0"
+          ]
+          subnet_ids = [var.aws_subnet_main_1_id, var.aws_subnet_main_2_id]
+        }
+
+        access_config {
+          authentication_mode                         = "API_AND_CONFIG_MAP"
+          bootstrap_cluster_creator_admin_permissions = true
+        }
+        enabled_cluster_log_types = [
+          "api",
+          "audit",
+          "authenticator",
+          "controllerManager",
+          "scheduler"
+        ]
+      }
+
+      resource "aws_eks_access_entry" "main" {
+        cluster_name      = aws_eks_cluster.main.name
+        principal_arn     = var.aws_iam_role_main_cluster_arn
+      }
+
+      resource "aws_eks_access_policy_association" "main" {
+        cluster_name  = aws_eks_cluster.main.name
+        policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSAdminPolicy"
+        principal_arn = var.aws_iam_role_main_cluster_arn
+
+        access_scope {
+          type       = "cluster"
+        }
+      }
+
+      resource "aws_eks_node_group" "main" {
+        cluster_name    = aws_eks_cluster.main.name
+        node_group_name = "${aws_eks_cluster.main.name}-ng"
+        node_role_arn   = var.aws_iam_role_main_worker_arn
+        subnet_ids      = [var.aws_subnet_main_1_id, var.aws_subnet_main_2_id]
+        instance_types = ["t3.large"]
+
+        scaling_config {
+          desired_size = 1
+          max_size     = 2
+          min_size     = 1
+        }
+
+        update_config {
+          max_unavailable = 1
+        }
+      }
+
+      data "aws_eks_cluster" "main" {
+        name = var.eks_cluster_name
+
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      data "aws_eks_cluster_auth" "main" {
+        name =  var.eks_cluster_name
+        
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      resource "helm_release" "nginx" {
+        name       = "nginx"
+        repository = "oci://registry-1.docker.io/bitnamicharts"
+        chart      = "nginx"
+        version    = "16.0.6"
+        namespace  = "nginx"
+        create_namespace = "true"
+        force_update = true
+
+        set {
+          name  = "service.type"
+          value = "NodePort"
+        }
+
+        set {
+          name  = "service.nodePorts.http"
+          value = "30080"
+        }
+
+        set {
+          name  = "service.nodePorts.https"
+          value = "30443"
+        }
+
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      resource "aws_lb_target_group" "main" {
+        name     = var.eks_cluster_name
+        port     = 30080
+        protocol = "HTTP"
+        vpc_id   = var.aws_vpc_id
+
+        tags = var.aws_tg_tags
+      }
+
+      resource "aws_autoscaling_traffic_source_attachment" "main" {
+        autoscaling_group_name = aws_eks_node_group.main.resources.0.autoscaling_groups.0.name
+
+        traffic_source {
+          identifier = aws_lb_target_group.main.arn
+          type       = "elbv2"
+        }
+      }
+
+      variable "eks_cluster_name" {
+        description = "EKS Cluster Name"
+        type        = string
+      }
+
+      variable "aws_iam_role_main_cluster_arn" {
+        description = "AWS Cluster Role ARN"
+        type        = string
+      }
+
+      variable "aws_iam_role_main_worker_arn" {
+        description = "AWS Worker Role ARN"
+        type        = string
+      }
+
+      variable "aws_subnet_main_1_id" {
+        description = "AWS Subnet 1 ID"
+        type        = string
+      }
+      
+      variable "aws_subnet_main_2_id" {
+        description = "AWS Subnet 2 ID"
+        type        = string
+      }
+
+      variable "aws_vpc_id" {
+        description = "AWS VPC ID"
+        type        = string
+      }
+
+      variable "aws_tg_tags" {
+        description = "EKS Managed Node Group CapacityType"
+        type        = map
+      }
+
+      output "target_group_arn" {
+        value = aws_lb_target_group.main.arn
+        sensitive = false
+      }
+    vars:
+      - key: eks_cluster_name
+        value: "codefresh-demo-environment-eks-2"
+      - key: aws_iam_role_main_cluster_arn
+        value: "arn:aws:iam::336151728602:role/codefresh-demo-environment-cluster"
+      - key: aws_iam_role_main_worker_arn
+        value: "arn:aws:iam::336151728602:role/codefresh-demo-environment-worker"
+      - key: aws_subnet_main_1_id
+        value: "subnet-024f5da41416f15d7"
+      - key: aws_subnet_main_2_id
+        value: "subnet-01a1ec73642b8f057"
+      - key: aws_vpc_id
+        value: "vpc-0aeaf09a787b64582"
+    varmap:
+      aws_tg_tags:
+        state: active
