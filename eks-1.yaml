@@ -205,4 +205,4 @@ spec:
         value: "vpc-0aeaf09a787b64582"
     varmap:
       aws_tg_tags:
-        state: idle
+        state: inactive
