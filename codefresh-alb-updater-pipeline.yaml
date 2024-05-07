@@ -18,7 +18,7 @@ spec:
       }
 
       provider "codefresh" {
-        api_key = var.codefresh_api_token
+        token = var.codefresh_api_token
       }
 
       resource "codefresh_project" "main" {
@@ -90,8 +90,8 @@ spec:
         type        = string
       }
 
-      output "aws_alb_id" {
-        value = aws_lb.main.arn
+      output "codefresh_pipeline_id" {
+        value = codefresh_pipeline.main.id
         sensitive = false
       }
     vars:
@@ -102,4 +102,4 @@ spec:
         secretKeyRef:
           namespace: gitops-runtime
           name: codefresh-credentials
-          key: codefresh.tfvar.json
+          key: codefresh.tfvar
