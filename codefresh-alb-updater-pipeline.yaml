@@ -8,6 +8,15 @@ spec:
   forProvider:
     source: Inline
     module: |
+      terraform {
+        required_providers {
+          codefresh = {
+            source = "codefresh-io/codefresh"
+            version = "0.9.0"
+          }
+        }
+      }
+
       provider "codefresh" {
         api_key = var.codefresh_api_token
       }
