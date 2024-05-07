@@ -3,6 +3,8 @@ kind: Workspace
 metadata:
   name: codefresh-demo-alb-updater-pipeline
 spec:
+  providerConfigRef:
+    name: aws-irsa
   forProvider:
     source: Inline
     module: |
