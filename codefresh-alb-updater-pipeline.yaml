@@ -75,7 +75,7 @@ spec:
           }
 
           variables = {
-            ALB_ARN      = var.aws_alb_id
+            ALB_ARN      = var.alb_arn
           }
         }
       }
