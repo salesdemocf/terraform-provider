@@ -1,0 +1,96 @@
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: codefresh-demo-alb
+spec:
+  providerConfigRef:
+    name: aws-irsa
+  forProvider:
+    source: Inline
+    module: |
+      provider "codefresh" {
+        api_key = var.codefresh_api_token
+      }
+
+      resource "codefresh_project" "main" {
+        name = "Crossplane"
+      }
+
+      resource "codefresh_pipeline" "main" {
+
+        lifecycle {
+          ignore_changes = [
+            revision
+          ]
+        }
+
+        name    = "${codefresh_project.main.name}/alb-updater"
+
+        tags = [
+          "amazon",
+          "crossplane",
+          "terraform"
+        ]
+
+        spec {
+          concurrency         = 1
+          branch_concurrency  = 1
+          trigger_concurrency = 1
+
+          priority    = 5
+
+          spec_template {
+            repo        = "salesdemocf/codefresh-pipelines"
+            path        = "./alb-updater.yaml"
+            revision    = "main"
+            context     = "git"
+          }
+
+          contexts = [
+            "salesdemocf"
+          ]
+
+          trigger {
+            branch_regex  = "/.*/gi"
+            context       = "salesdemocf"
+            description   = "Manual ALB Update"
+            disabled      = true
+            events        = [
+              "push.heads"
+            ]
+            modified_files_glob = ""
+            name                = "commits"
+            provider            = "github"
+            repo                = "salesdemocf/terraform-provider"
+            type                = "git"
+          }
+
+          variables = {
+            ALB_ARN      = var.aws_alb_id
+          }
+        }
+      }
+
+      variable "alb_arn" {
+        description = "ALB ARN"
+        type        = string
+      }
+
+      variable "codefresh_api_token" {
+        description = "API Token for Codefresh"
+        type        = string
+      }
+
+      output "aws_alb_id" {
+        value = aws_lb.main.arn
+        sensitive = false
+      }
+    vars:
+      - key: alb_arn
+        value: "arn:aws:elasticloadbalancing:us-east-1:336151728602:targetgroup/codefresh-demo-environment-eks-1/32380eb8b7a4fafe"
+    varFiles:
+      - source: SecretKey
+        secretKeyRef:
+          namespace: gitops-runtime
+          name: codefresh-credentials
+          key: codefresh.tfvar.json
