@@ -1,10 +1,8 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: codefresh-demo-alb
+  name: codefresh-demo-alb-updater-pipeline
 spec:
-  providerConfigRef:
-    name: aws-irsa
   forProvider:
     source: Inline
     module: |
