@@ -101,7 +101,7 @@ spec:
       }
     vars:
       - key: alb_arn
-        value: "arn:aws:elasticloadbalancing:us-east-1:336151728602:targetgroup/codefresh-demo-environment-eks-1/32380eb8b7a4fafe"
+        value: "arn:aws:elasticloadbalancing:us-east-1:336151728602:loadbalancer/app/codefresh-demo-environment/fd0e7b2702be20b5"
     varFiles:
       - source: SecretKey
         secretKeyRef:
