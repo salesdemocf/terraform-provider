@@ -114,7 +114,7 @@ spec:
         force_update = true
 
         set {
-          name  = "ingress.enable"
+          name  = "ingress.enabled"
           value = "true"
         }
 
