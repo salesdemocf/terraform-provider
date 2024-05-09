@@ -154,7 +154,7 @@ spec:
 
         set {
           name  = "global.runtime.name"
-          value = aws_eks_node_group.main
+          value = aws_eks_cluster.main.name
         }
 
         depends_on = [
