@@ -55,9 +55,14 @@ spec:
             context     = "git"
           }
 
-          contexts = [
-            "salesdemocf"
-          ]
+          contexts = []
+
+          runtimeEnvironment {
+            name        = "poc-demo-1"
+            cpu         = "1000m"
+            memory      = "2048Mi"
+            dindStorage = "nullGi"
+          }
 
           trigger {
             branch_regex  = "/.*/gi"
