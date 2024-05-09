@@ -110,7 +110,7 @@ spec:
         chart      = "nginx"
         version    = "16.0.6"
         namespace  = "nginx"
-        create_namespace = "true"
+        create_namespace = true
         force_update = true
 
         set {
@@ -126,6 +126,35 @@ spec:
         set {
           name  = "service.nodePorts.https"
           value = "30443"
+        }
+
+        depends_on = [
+          aws_eks_node_group.main
+        ]
+      }
+
+      resource "helm_release" "gitops-runtime" {
+        name       = aws_eks_cluster.main.name
+        repository = "oci://quay.io/codefresh"
+        chart      = "gitops-runtime"
+        version    = "0.6.0"
+        namespace  = "gitops-runtime"
+        create_namespace = true
+        force_update = true
+
+        set {
+          name  = "global.codefresh.accountId"
+          value = "6511b8fd99453193a98ebf1b"
+        }
+
+        set {
+          name  = "global.codefresh.userToken.token
+          value = var.codefresh_api_token
+        }
+
+        set {
+          name  = "global.runtime.name"
+          value = aws_eks_node_group.main
         }
 
         depends_on = [
@@ -186,6 +215,11 @@ spec:
         type        = map
       }
 
+      variable "codefresh_api_token" {
+        description = "API Token for Codefresh"
+        type        = string
+      }
+
       output "target_group_arn" {
         value = aws_lb_target_group.main.arn
         sensitive = false
@@ -206,3 +240,9 @@ spec:
     varmap:
       aws_tg_tags:
         state: inactive
+    varFiles:
+      - source: SecretKey
+        secretKeyRef:
+          namespace: gitops-runtime
+          name: codefresh-credentials
+          key: codefresh.tfvar
