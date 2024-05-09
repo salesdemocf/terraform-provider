@@ -119,6 +119,11 @@ spec:
         }
 
         set {
+          name  = "service.externalTrafficPolicy"
+          value = "Cluster"
+        }
+
+        set {
           name  = "service.nodePorts.http"
           value = "30080"
         }
