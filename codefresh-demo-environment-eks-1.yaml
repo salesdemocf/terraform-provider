@@ -104,35 +104,6 @@ spec:
         ]
       }
 
-      resource "helm_release" "nginx-ingress" {
-        name       = "nginx-ingress"
-        repository = "oci://registry-1.docker.io/bitnamicharts"
-        chart      = "nginx-ingress-controller"
-        version    = "11.1.2"
-        namespace  = "nginx-ingress"
-        create_namespace = true
-        force_update = true
-
-        set {
-          name  = "service.type"
-          value = "NodePort"
-        }
-
-        set {
-          name  = "service.nodePorts.http"
-          value = "30080"
-        }
-
-        set {
-          name  = "service.nodePorts.https"
-          value = "30443"
-        }
-
-        depends_on = [
-          aws_eks_node_group.main
-        ]
-      }
-
       resource "helm_release" "gitops-runtime" {
         name       = aws_eks_cluster.main.name
         repository = "oci://quay.io/codefresh"
