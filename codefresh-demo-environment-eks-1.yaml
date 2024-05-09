@@ -148,7 +148,7 @@ spec:
         }
 
         set {
-          name  = "global.codefresh.userToken.token
+          name  = "global.codefresh.userToken.token"
           value = var.codefresh_api_token
         }
 
