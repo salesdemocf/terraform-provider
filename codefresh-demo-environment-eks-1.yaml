@@ -104,12 +104,12 @@ spec:
         ]
       }
 
-      resource "helm_release" "nginx" {
-        name       = "nginx"
+      resource "helm_release" "nginx-ingress" {
+        name       = "nginx-ingress"
         repository = "oci://registry-1.docker.io/bitnamicharts"
-        chart      = "nginx"
-        version    = "16.0.6"
-        namespace  = "nginx"
+        chart      = "nginx-ingress-controller"
+        version    = "11.1.2"
+        namespace  = "nginx-ingress"
         create_namespace = true
         force_update = true
 
