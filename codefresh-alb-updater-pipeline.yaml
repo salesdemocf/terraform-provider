@@ -61,7 +61,7 @@ spec:
             name        = "poc-demo-1"
             cpu         = "1000m"
             memory      = "2048Mi"
-            dindStorage = "nullGi"
+            dind_storage = "nullGi"
           }
 
           trigger {
