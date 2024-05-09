@@ -114,6 +114,21 @@ spec:
         force_update = true
 
         set {
+          name  = "ingress.enable"
+          value = "true"
+        }
+
+        set {
+          name  = "ingress.hostname"
+          value = "eksbg.sales-dev.codefresh.io"
+        }
+
+        set {
+          name  = "ingress.ingressClassName"
+          value = "nginx"
+        }
+
+        set {
           name  = "service.type"
           value = "NodePort"
         }
