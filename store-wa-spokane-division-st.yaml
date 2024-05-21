@@ -226,7 +226,7 @@ spec:
       }
     vars:
       - key: eks_cluster_name
-        value: "division-st"
+        value: "store-wa-spokane-division-st"
       - key: aws_iam_role_main_cluster_arn
         value: "arn:aws:iam::336151728602:role/codefresh-demo-environment-cluster"
       - key: aws_iam_role_main_worker_arn
