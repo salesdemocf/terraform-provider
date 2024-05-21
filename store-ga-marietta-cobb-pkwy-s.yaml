@@ -1,7 +1,7 @@
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
-  name: codefresh-demo-eks-1
+  name: store-ga-marietta-cobb-pkwy-s
 spec:
   providerConfigRef:
     name: aws-irsa
