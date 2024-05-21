@@ -137,7 +137,7 @@ spec:
         name       = aws_eks_cluster.main.name
         repository = "oci://quay.io/codefresh"
         chart      = "gitops-runtime"
-        version    = "0.6.0"
+        version    = "0.7.0"
         namespace  = "gitops-runtime"
         create_namespace = true
         force_update = true
